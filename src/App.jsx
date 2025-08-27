@@ -1,3 +1,5 @@
+
+
 /*
 //const Header = (props) => {
   //console.log(props)
@@ -246,6 +248,7 @@ Opettajan esimerkki:
 --------------------*/
 
 //component Header
+
 function Header(props) {
   console.log(props);
   return (
