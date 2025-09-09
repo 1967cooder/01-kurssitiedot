@@ -1,5 +1,6 @@
 
 
+
 /*
 //const Header = (props) => {
   //console.log(props)
@@ -246,58 +247,80 @@ export default App;
 /*---------------------
 Opettajan esimerkki:
 --------------------*/
+// -----------------------------
+// Peruskomponentit (vaiheet 1.x)
+// -----------------------------
+import { useState } from "react";
 
-//component Header
 
-function Header(props) {
-  console.log(props);
+const Header = ({ name }) => {
+  return <h1>{name}</h1>;
+};
+
+const Part = ({ name, exercises }) => {
   return (
-    <>
-      <h1>{props.name}</h1>
-    </>
+    <p>
+      {name} {exercises}
+    </p>
   );
-}
-function Part(props) {
-  console.log(props);
+};
+
+const Content = ({ name1, exercises1, name2, exercises2, name3, exercises3 }) => {
   return (
-    <>
-      <p>
-        {props.name} {props.exercises}
-      </p>
-    </>
+    <div>
+      <Part name={name1} exercises={exercises1} />
+      <Part name={name2} exercises={exercises2} />
+      <Part name={name3} exercises={exercises3} />
+    </div>
   );
-}
-// component Content
-function Content(props) {
-  console.log(props);
+};
+
+const Total = ({ total }) => {
+  return <p>Number of exercises {total}</p>;
+};
+
+// -----------------------------
+// Lopulliset komponentit (2.x)
+// -----------------------------
+
+const Part2 = ({ part }) => {
   return (
-    <>
-      {/* <p>
-        {props.name1} {props.exercises1}
-      </p>
-      <p>
-        {props.name2} {props.exercises2}
-      </p>
-      <p>
-        {props.name3} {props.exercise3}
-      </p> */}
-      <Part name={props.name1} exercises={props.exercises1} />
-      <Part name={props.name2} exercises={props.exercises2} />
-      <Part name={props.name3} exercises={props.exercises3} />
-    </>
+    <p>
+      {part.name} {part.exercises}
+    </p>
   );
-}
-// component Total
-function Total(props) {
-  console.log(props);
+};
+
+const Content2 = ({ parts }) => {
   return (
-    <>
-      <p> Number of exercises is {props.total}</p>
-    </>
+    <div>
+      {parts.map((part) => (
+        <Part2 key={part.id} part={part} />
+      ))}
+    </div>
   );
-}
-function App() {
-  //1st Date structure (phase 1)
+};
+
+const Total2 = ({ parts }) => {
+  const total = parts.reduce((sum, part) => sum + part.exercises, 0);
+  return <p>Number of exercises {total}</p>;
+};
+
+const Course = ({ course_5 }) => {
+  return (
+    <div>
+      <Header name={course_5.name} />
+      <Content2 parts={course_5.parts} />
+      <Total2 parts={course_5.parts} />
+    </div>
+  );
+};
+
+// -----------------------------
+// App
+// -----------------------------
+const App = () => {
+  // Vaihe 1.1 (yksittäiset muuttujat)
   const course = "Half Stack application development";
   const part1 = "Fundamentals of React";
   const exercises1 = 10;
@@ -305,58 +328,46 @@ function App() {
   const exercises2 = 7;
   const part3 = "State of a component";
   const exercises3 = 14;
-  //2nd Date structure (phase 2)
+
+  // Vaihe 1.2–1.3 (kurssi + osat olioina)
   const course_n = "Half Stack application development";
-  const part1_n = {
-    name: "Fundamentals of React",
-    exercises: 10,
-  };
-  const part2_n = {
-    name: "Using props to pass data of React",
-    exercises: 7,
-  };
-  const part3_n = {
-    name: "State of a component",
-    exercises: 14,
-  };
-  //3rd Date structure (phase 3)
+  const part1_n = { name: "Fundamentals of React", exercises: 10 };
+  const part2_n = { name: "Using props to pass data", exercises: 7 };
+  const part3_n = { name: "State of a component", exercises: 14 };
+
+  // Vaihe 1.4 (kurssi + taulukko)
   const course_3 = "Half Stack application development";
   const parts_3 = [
-    {
-      name: "Fundamentals of React",
-      exercises: 10,
-    },
-    {
-      name: "Using props to pass data",
-      exercises: 7,
-    },
-    {
-      name: "State of a component",
-      exercises: 14,
-    },
+    { name: "Fundamentals of React", exercises: 10 },
+    { name: "Using props to pass data", exercises: 7 },
+    { name: "State of a component", exercises: 14 },
   ];
-  //4th Date structure (phase 4)
+
+  // Vaihe 1.5 (kurssi oliona, jossa parts-taulukko)
   const course_4 = {
     name: "Half Stack application development",
     parts: [
-      {
-        name: "Fundamentals of React",
-        exercises: 10,
-      },
-      {
-        name: "Using props to pass data",
-        exercises: 7,
-      },
-      {
-        name: "State of a component",
-        exercises: 14,
-      },
+      { name: "Fundamentals of React", exercises: 10 },
+      { name: "Using props to pass data", exercises: 7 },
+      { name: "State of a component", exercises: 14 },
     ],
   };
+
+  // Vaihe 2.1–2.5 (kurssi oliona, parts + id:t)
+  const course_5 = {
+    name: "Half Stack application development",
+    id: 1,
+    parts: [
+      { name: "Fundamentals of React", exercises: 10, id: 1 },
+      { name: "Using props to pass data", exercises: 7, id: 2 },
+      { name: "State of a component", exercises: 14, id: 3 },
+    ],
+  };
+
   return (
-    <>
-      <h1> whole app content</h1>
-      <h2> {course}</h2>
+    <div>
+      <h2>1.1 Yksinkertainen versio</h2>
+      <h1>{course}</h1>
       <p>
         {part1} {exercises1}
       </p>
@@ -366,11 +377,11 @@ function App() {
       <p>
         {part3} {exercises3}
       </p>
-      <p>
-        Number of exercises {exercises1} + {exercises2} + {exercises3}
-      </p>
-      <hr></hr>
-      <h1>content devited to 3 component header content and total</h1>
+      <p>Number of exercises {exercises1 + exercises2 + exercises3}</p>
+
+      <hr />
+
+      <h2>1.2–1.3 Komponentit Header, Content, Total</h2>
       <Header name={course} />
       <Content
         name1={part1}
@@ -381,8 +392,10 @@ function App() {
         exercises3={exercises3}
       />
       <Total total={exercises1 + exercises2 + exercises3} />
+
       <hr />
-      <h1> With new data structure</h1>
+
+      <h2>1.3 Uusi tietorakenne (olioina)</h2>
       <Header name={course_n} />
       <Content
         name1={part1_n.name}
@@ -395,8 +408,10 @@ function App() {
       <Total
         total={part1_n.exercises + part2_n.exercises + part3_n.exercises}
       />
+
       <hr />
-      <h1>Data Structure Phase 3 (Assignment 1.4)</h1>
+
+      <h2>1.4 Osat taulukossa</h2>
       <Header name={course_3} />
       <Content
         name1={parts_3[0].name}
@@ -408,11 +423,15 @@ function App() {
       />
       <Total
         total={
-          parts_3[0].exercises + parts_3[1].exercises + parts_3[2].exercises
+          parts_3[0].exercises +
+          parts_3[1].exercises +
+          parts_3[2].exercises
         }
       />
+
       <hr />
-      <h1>Data Structure Phase 4 (Assignment1.5)</h1>
+
+      <h2>1.5 Kurssi oliona (course_4)</h2>
       <Header name={course_4.name} />
       <Content
         name1={course_4.parts[0].name}
@@ -429,11 +448,19 @@ function App() {
           course_4.parts[2].exercises
         }
       />
-    </>
+
+      <hr />
+
+      <h2>2.1–2.5 Lopullinen versio (Course, Content2, Part2, Total2)</h2>
+      <Course course_5={course_5} />
+    </div>
   );
-}
+};
 
 export default App;
+
+
+
 
 
 
