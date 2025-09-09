@@ -364,6 +364,21 @@ const App = () => {
     ],
   };
 
+  // -----------------------------
+  // 2.6:Monta kursseja
+  // -----------------------------
+  const courses = [
+    course_5,
+    {
+      name: "Node.js",
+      id: 2,
+      parts: [
+        { name: "Routing", exercises: 3, id: 1 },
+        { name: "Middlewares", exercises: 7, id: 2 },
+      ],
+    },
+  ];
+
   return (
     <div>
       <h2>1.1 Yksinkertainen versio</h2>
@@ -452,7 +467,9 @@ const App = () => {
       <hr />
 
       <h2>2.1–2.5 Lopullinen versio (Course, Content2, Part2, Total2)</h2>
-      <Course course_5={course_5} />
+      {courses.map((course) => (
+      <Course key={course.id} course_5={course} />
+    ))}
     </div>
   );
 };
